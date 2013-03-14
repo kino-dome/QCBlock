@@ -1,4 +1,4 @@
-ciQCBlock
-=========
+QCBlock
+=======
 
-A Cinder block inspired by Memo's ofxQuartzComposition. It enables Quartz Composition loading/running!
+A Cinder block inspired by Memo Atken's ofxQuartzComposition. It enables Cinder (libcinder.com) to load/control/run Quartz Compositions.
