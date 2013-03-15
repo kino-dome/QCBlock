@@ -237,6 +237,21 @@ namespace cinder { namespace QCBlock{
 		CGColorSpaceRef colorSpace			= CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
 		mQCRenderer = [[QCRenderer alloc] initWithCGLContext:cglContext pixelFormat:cglPixelFormat colorSpace:colorSpace composition:mQCComposition];
 		CGColorSpaceRelease(colorSpace);
+        
+        NSArray* inputKeys=getInputKeys();
+        console()<<mPath<<" has "<<([inputKeys count])<<" input Keys"<<endl;
+        for ( int i=0; i<[inputKeys count]; i++){
+            console()<<fromNSString([inputKeys objectAtIndex:i])<<endl;
+        }
+        [inputKeys release];
+        
+        NSArray* outputKeys=getOutputKeys();
+        console()<<mPath<<" has "<<([outputKeys count])<<" Output Keys"<<endl;
+        for ( int i=0; i<[outputKeys count]; i++){
+            console()<<fromNSString([outputKeys objectAtIndex:i])<<endl;
+        }
+        [outputKeys release];
+        
 	}
     
     void QuartzComposition::draw(NSEvent *event) {
