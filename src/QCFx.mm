@@ -15,16 +15,16 @@ namespace cinder { namespace QCBlock {
     {
         gl::Fbo  fbo=gl::Fbo(aTex.getWidth(),aTex.getHeight());
         setValueForKey(aTex, "inputImage_1");
-        NSArray* inputKeys=getInputKeys();
-        console()<<([inputKeys count])<<endl;
-        for ( int i=0; i<2; i++){
-            console()<<fromNSString([inputKeys objectAtIndex:i])<<endl;
-        }
+        
         
         fbo.bindFramebuffer();
+        gl::setMatricesWindowPersp(fbo.getWidth(), fbo.getHeight());
         gl::clear(Color::black());
         draw();
         fbo.unbindFramebuffer();
+        gl::setMatricesWindowPersp(mApp->getWindowWidth(), mApp->getWindowHeight());
+        
+        
         return fbo.getTexture();
         
     }
