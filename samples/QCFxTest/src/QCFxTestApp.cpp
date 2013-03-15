@@ -25,6 +25,7 @@ class QCFxTestApp : public AppBasic {
     Capture                 mCapture;
     Surface                 mCaptureSurf;
     gl::Texture             mCaptureTex;
+    gl::Texture::Format     mTexFormat;
     
     QCBlock::QCFx           mQCFx;
 };
@@ -35,10 +36,13 @@ void QCFxTestApp::setup()
     mParams = params::InterfaceGl("parameters", Vec2i(100,100));
     mParams.addParam("Blur Amount", &mBlurAmount, "min=0.0 max=5.0 step=0.05");
     
+    mQCFx.registerEvents(this);
     mQCFx.load(getResourcePath(VADEBLUR));
     
     mCapture=Capture(640,480);
     mCapture.start();
+    // The input texture's target SHOULD be GL_TEXTURE_RECTANGLE_ARB for the CIImage conversion to take place correctly
+    mTexFormat.setTarget(GL_TEXTURE_RECTANGLE_ARB);
 }
 
 void QCFxTestApp::mouseDown( MouseEvent event )
@@ -49,7 +53,7 @@ void QCFxTestApp::update()
 {
     if(mCapture.checkNewFrame() && mCapture.isCapturing()){
         mCaptureSurf=mCapture.getSurface();
-        mCaptureTex=gl::Texture(mCaptureSurf);
+        mCaptureTex=gl::Texture(mCaptureSurf, mTexFormat);
         mCaptureTex=mQCFx.applyFx(mCaptureTex);
         mQCFx.setValueForKey(mBlurAmount, "Amount");
     }
@@ -60,6 +64,7 @@ void QCFxTestApp::draw()
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
     if(mCaptureTex)    gl::draw(mCaptureTex,getWindowBounds());
+    console()<<getAverageFps()<<endl;
     //mQCFx.draw();
     mParams.draw();
     
